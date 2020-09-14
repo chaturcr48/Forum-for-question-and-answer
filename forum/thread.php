@@ -3,6 +3,8 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     include "partials/dbconnect.php";
     $id = $_GET['threadid'];
     $comment = $_POST['comment'];
+    $comment = str_replace("<", "&lt;", $comment);
+    $comment = str_replace(">", "&gt;", $comment);
     $sno = $_POST['sno'];
     $sql="INSERT INTO `comments` (`comment_id`, `comment`, `thread_id`, `comment_by`, `comment_time`) VALUES (NULL, '$comment', '$id', '$sno', current_timestamp())";
     $result=mysqli_query($conn, $sql);
@@ -24,6 +26,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 </head>
 
 <body>
+    <?php include "partials/dbconnect.php"; ?>
     <?php include "partials/_header.php"; ?>
     <?php
     if($_SERVER['REQUEST_METHOD']=='POST'){
@@ -45,7 +48,6 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
         }
     }
     ?>
-    <?php include "partials/dbconnect.php"; ?>
     <?php
         $id=$_GET['threadid'];
         $sql="SELECT * FROM `thread_table` WHERE thread_id = $id";
@@ -53,6 +55,11 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
         while($row=mysqli_fetch_assoc($result)){
             $title=$row['thread_title'];
             $desc=$row['thread_description'];
+            $thread_user_id=$row['thread_user_id'];
+            $sql2="SELECT `username` FROM `user` WHERE sno='$thread_user_id'";
+            $result2=mysqli_query($conn, $sql2);
+            $row2=mysqli_fetch_assoc($result2);
+            $posted_by=$row2['username'];
         }
     ?>
     <div class="container mt-4">
@@ -61,7 +68,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
             <p class="lead"><?php echo $desc; ?></p>
             <hr class="my-4">
             <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-            <p><b>show more</b></p>
+            <p>Posted by  <b><?php echo $posted_by; ?></b></p>
         </div>
     </div>
     <div class="container">
@@ -86,7 +93,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
                 echo '<li class="media mt-3">
                 <img src="https://carismartes.com.br/assets/global/images/avatars/avatar7_big@2x.png" width="50px" class="mr-3" alt="...">
                 <div class="media-body">
-                    <h5 class="mt-0 mb-1"><a class="text-dark" href="/CHATUR_PHP/forum/thread.php?threadid='.$id2.'">'.$row2['username'].'&nbsp&nbsp'.$time.'</a></h5>
+                    <h5 class="mt-0 mb-1"><a class="text-dark" href="/CHATUR_PHP/forum/thread.php?threadid='.$id2.'">'.$row2['username'].' at '.$time.'</a></h5>
                     '.$comment.'
                 </div>
             </li>';
