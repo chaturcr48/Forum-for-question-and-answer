@@ -3,7 +3,11 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     include "dbconnect.php";
     $id = $_GET['catid'];
     $ptitle = $_POST['prob_title'];
+    $ptitle = str_replace("<", "&lt;", $ptitle);
+    $ptitle = str_replace(">", "&gt;", $ptitle);
     $pdesc = $_POST['prob_desc'];
+    $pdesc = str_replace("<", "&lt;", $pdesc);
+    $pdesc = str_replace(">", "&gt;", $pdesc);
     $sno = $_POST['sno'];
     $sql="INSERT INTO `thread_table` (`thread_id`, `thread_title`, `thread_description`, `thread_cat_id`, `thread_user_id`, `timestamp`) VALUES (NULL, '$ptitle', '$pdesc', '$id', '$sno', current_timestamp());";
     $result=mysqli_query($conn, $sql);
@@ -25,6 +29,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 </head>
 
 <body>
+    <?php include "dbconnect.php"; ?>
     <?php include "_header.php"; ?>
     <?php
     if($_SERVER['REQUEST_METHOD']=='POST'){
@@ -46,7 +51,6 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
         }
     }
     ?>
-    <?php include "dbconnect.php"; ?>
     <?php
         $id=$_GET['catid'];
         $sql="SELECT * FROM `categories` WHERE category_id = $id";
