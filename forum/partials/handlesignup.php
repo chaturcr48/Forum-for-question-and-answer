@@ -14,7 +14,6 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     $numExistRows=mysqli_num_rows($result);
   
     if($numExistRows > 0){
-        // $showError="Username already exist.";
         header("Location: /CHATUR_PHP/forum/home.php?userexist=true");
         exit();
     }
@@ -25,18 +24,15 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
             $result=mysqli_query($conn, $sql);
 
             if($result){
-                // $showAlert=true;
                 header("Location: /CHATUR_PHP/forum/home.php?signupsuccess=true");
                 exit();
             }
         }
         else{
-            // $showError="Password do not match.";
             header("Location: /CHATUR_PHP/forum/home.php?passunmatch=true");
             exit();
         }
     }
-    // header("Location: /CHATUR_PHP/forum/home.php?signupsuccess=false&error=$showError");
 }
 
 ?>
