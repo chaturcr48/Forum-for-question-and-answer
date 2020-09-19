@@ -14,6 +14,7 @@
 </head>
 
 <body>
+    <?php include "partials/dbconnect.php"; ?>
     <?php include "partials/_header.php"; ?>
     <?php include "partials/footer.php"; ?>
     <!-- Optional JavaScript -->
